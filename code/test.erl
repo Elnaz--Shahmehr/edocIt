@@ -1,3 +1,3 @@
-%%This is test.erl
+%%This is test.erl,hello
 -module(test).
 -export().
