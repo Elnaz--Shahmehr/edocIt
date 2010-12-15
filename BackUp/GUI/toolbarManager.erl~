@@ -1,0 +1,37 @@
+-module(toolbarManager).
+-export([setState/4]).
+
+setState(Frame, ListCtrl, ItemId, State)->
+    Tools = wxFrame: getToolBar(Frame),
+    ID = 1001,
+    case State of
+	not_selected ->
+	    Not_selected = [false, false, false, false],
+	    set(Tools, ID, Not_selected);	
+	play ->
+	    Play = [true, false, true, true],
+	    itemManager: setItem(ItemId, play),
+	    wxListCtrl: setItem(ListCtrl, ItemId, 2, "Downloading..."),
+	    set(Tools, ID, Play);
+	pause ->
+	    Pause = [true, true, false, true],
+	    itemManager: setItem(ItemId, pause),
+	    wxListCtrl: setItem(ListCtrl, ItemId, 2, "Paused"),
+	    set(Tools, ID, Pause);
+	stop ->
+	    Stop = [true, true, false, false],
+	    itemManager: setItem(ItemId, stop),
+	    wxListCtrl: setItem(ListCtrl, ItemId, 2, "Stopped"),
+	    set(Tools, ID, Stop);
+	waiting ->
+	    Waiting = [true, true, false, false],
+	    itemManager: setItem(ItemId, waiting),
+	    wxListCtrl: setItem(ListCtrl, ItemId, 2, "Waiting"),
+	    set(Tools, ID, Waiting)
+    end.
+
+set(_,_, []) ->
+    ok;
+set(Tools, ID, [H|T])->
+    wxToolBar: enableTool(Tools, ID, H),
+    set(Tools, ID + 1, T).
